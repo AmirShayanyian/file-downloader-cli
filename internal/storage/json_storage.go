@@ -3,6 +3,7 @@ package storage
 import (
 	"encoding/json"
 	"os"
+	"path/filepath"
 
 	"github.com/AmirShayanyian/file-downloader-cli/internal/queue"
 )
@@ -31,4 +32,21 @@ func (s *JSONStore) List() ([]queue.Queue, error) {
 	}
 
 	return queues, nil
+}
+
+func (s *JSONStore) Save(q queue.Queue) error {
+	queues, _ := s.List()
+
+	queues = append(queues, q)
+
+	data, err := json.MarshalIndent(queues, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	if err := os.MkdirAll(filepath.Dir(s.path), 0755); err != nil {
+		return err
+	}
+
+	return os.WriteFile(s.path, data, 0644)
 }
