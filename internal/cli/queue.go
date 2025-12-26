@@ -39,3 +39,29 @@ func createQueueCmd() *cobra.Command {
 		},
 	}
 }
+
+func listQueueCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "list",
+		Short: "List queues",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			store := storage.NewJSONStore("data/queues.json")
+
+			queues, err := store.List()
+			if err != nil {
+				return err
+			}
+
+			if len(queues) == 0 {
+				fmt.Println("No queues found.")
+				return nil
+			}
+
+			for _, q := range queues {
+				fmt.Println("-", q.Name)
+			}
+
+			return nil
+		},
+	}
+}
