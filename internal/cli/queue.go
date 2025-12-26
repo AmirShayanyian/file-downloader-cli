@@ -14,6 +14,7 @@ func init() {
 		Short: "Manage download queues",
 	}
 	queueCmd.AddCommand(createQueueCmd())
+	queueCmd.AddCommand(listQueueCmd())
 
 	rootCmd.AddCommand(queueCmd)
 }
